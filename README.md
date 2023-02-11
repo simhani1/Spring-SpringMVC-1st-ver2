@@ -100,4 +100,68 @@ logging.level.hello.springmvc=debug
 
 - 요청 파라미터 - 쿼리 파라미터, HTML Form
   - HttpServletRequest의 request.getParameter()를 사용하면 다음 두가지 요청 파라미터를 조회할 수 있다.
-  - 
+
+#### HTTP 요청 파라미터 - @RequestParam
+- 아래와 같이 4가지 방식으로 파라미터를 매개변수로 입력받을 수 있다.
+```java
+    /**
+     * 반환 타입이 없으면서 이렇게 응답에 값을 직접 집어넣으면, view 조회X
+     */
+    @RequestMapping("/request-param-v1")
+    public void requestParamV1(HttpServletRequest request,
+                               HttpServletResponse response) throws IOException {
+        String username = request.getParameter("username");
+        int age = Integer.parseInt(request.getParameter("age"));
+        log.info("username={}, age={}", username, age);
+
+        response.getWriter().write("ok");
+    }
+
+    @ResponseBody  // ok라는 문자열로 view를 조회하지 않고 그냥 문자열을 http응답에 넣어서 보내버린다.
+    @RequestMapping("/request-param-v2")
+    // 파라미터 명을 직접 지정한대로 입력받아야 한다.
+    public String requestParamV2(@RequestParam("username") String memberName,
+                                 @RequestParam("age") int memberAge) {
+        log.info("username={}, age={}", memberName, memberAge);
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/request-param-v3")
+    // 변수명과 파라미터 명이 동일해야 인식을 할 수 있다.
+    public String requestParamV3(@RequestParam String username,
+                                 @RequestParam int age) {
+        log.info("username={}, age={}", username, age);
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/request-param-v4")
+    // 어노테이션을 생략하는 것은 약간 과하다고 생각이 들기도 한다.
+    // 팀원들을 위해 어노테이션을 생략하는 것는 조금 지양을 하자
+    public String requestParamV4(String username, int age) {
+        log.info("username={}, age={}", username, age);
+        return "ok";
+    }
+```
+- @RequestPram.required
+  - 파라미터 값 필수 여부를 지정할 수 있다.
+  - 기본은 true로 설정되어 있다.
+- 주의
+  - 파라미터 이름만 사용
+    - 파라미터 이름만 있고 값이 없는 경우 -> 빈문자로 인식하여 통과된다.
+  - 기본형(primitive type)에 null입력
+    - null을 int에 입력하는 것은 불가능(500에러)
+    - 따라서 null을 받을 수 있는 primitive type으로 지정해줘야 한다.
+
+- 기본 값 적용 - defaultValue
+  - 값이 없는 경우 설정한 디폴트 값으로 대체된다.
+  - **defaultValue는 빈문자가 와도 기본값으로 대체한다.**
+
+- 파라미터를 Map으로 조회하기 - requestParamMap
+  - 모든 파라미터를 Map, MultiValueMap으로 조회할 수 있다.
+  - 주의
+    - 파라미터 값이 1개가 확실하면 Map을 사용해도 된다.
+    - 그렇지 않다면 MultiValueMap을 사용하는 것이 옳다.
+      - EX) 키워드 파라미터가 여러개 들어올 수도 있다.
+- 
