@@ -54,3 +54,32 @@ logging.level.hello.springmvc=debug
   - 즉 출력을 하지도 않는데 문자열을 합치는 연산이 일어나서 메모리가 낭비되는 것이 문제점이다.
   - 따라서 이는 사용은 가능하지만 절대 사용하면 안되는 방법이다.
 
+#### HTTP 요청
+- HttpServletResponse
+- HttpMethod : HTTP 메서드를 조회한다. 
+- org.springframework.http.HttpMethod Locale : Locale 정보를 조회한다.
+- @RequestHeader MultiValueMap<String, String> headerMap
+  - 모든 HTTP 헤더를 MultiValueMap 형식으로 조회한다. 
+- @RequestHeader("host") String host
+  - 특정 HTTP 헤더를 조회한다. 
+  - 속성
+    - 필수 값 여부: required
+    - 기본 값 속성: defaultValue
+- @CookieValue(value = "myCookie", required = false) String cookie
+  - 특정 쿠키를 조회한다.
+  - 속성
+    - 필수 값 여부: required 
+    - 기본 값: defaultValue
+
+- MultiValueMap 
+  - MAP과 유사한데, 하나의 키에 여러 값을 받을 수 있다.
+  - HTTP header, HTTP 쿼리 파라미터와 같이 하나의 키에 여러 값을 받을 때 사용한다.
+  - keyA=value1 & keyA=value2
+
+- @slf4j
+  - 아래 코드를 자동으로 생성해서 로그를 선언해준다.
+  ```java
+  private static final org.slf4j.Logger log =
+  org.slf4j.LoggerFactory.getLogger(RequestHeaderController.class);
+  ```
+- 
