@@ -54,7 +54,7 @@ logging.level.hello.springmvc=debug
   - 즉 출력을 하지도 않는데 문자열을 합치는 연산이 일어나서 메모리가 낭비되는 것이 문제점이다.
   - 따라서 이는 사용은 가능하지만 절대 사용하면 안되는 방법이다.
 
-#### HTTP 요청
+#### HTTP 요청 - 기본, 헤더 조회
 - HttpServletResponse
 - HttpMethod : HTTP 메서드를 조회한다. 
 - org.springframework.http.HttpMethod Locale : Locale 정보를 조회한다.
@@ -82,4 +82,22 @@ logging.level.hello.springmvc=debug
   private static final org.slf4j.Logger log =
   org.slf4j.LoggerFactory.getLogger(RequestHeaderController.class);
   ```
-- 
+[`@Controller`의 사용 가능한 파라미터 목록](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments)
+[`@Controller`의 사용 가능한 응답 값 목록](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-return-types)
+
+#### HTTP 요청 파라미터 - 쿼리 파라미터, HTML Form
+- HTTP 요청 데이터 조회
+- 클라이언트에서 서버로 요청 데이터를 전달할 때는 주로 다음 3가지 방법을 사용한다.
+- GET - 쿼리 파라미터
+  - 메시지 바디 없이 URL의 쿼리 파라미터에 데이터를 포함해서 전달
+- POST - HTML Form
+  - content-type:application/x-www-form-urlencoded 
+  - 메시지 바디에 쿼리 파라미터 형식으로 전달
+- HTTP message body에 데이터를 직접 담아서 요청
+  - HTTP API에서 주로 사용, JSON, XML, TEXT
+  - 데이터 형식은 주로 JSON사용
+  - POST, PUT, PATCH
+
+- 요청 파라미터 - 쿼리 파라미터, HTML Form
+  - HttpServletRequest의 request.getParameter()를 사용하면 다음 두가지 요청 파라미터를 조회할 수 있다.
+  - 
