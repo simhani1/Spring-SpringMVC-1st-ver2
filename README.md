@@ -164,4 +164,31 @@ logging.level.hello.springmvc=debug
     - 파라미터 값이 1개가 확실하면 Map을 사용해도 된다.
     - 그렇지 않다면 MultiValueMap을 사용하는 것이 옳다.
       - EX) 키워드 파라미터가 여러개 들어올 수도 있다.
-- 
+
+#### HTTP 요청 파라미터 - @ModelAttribute
+```java
+   @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttibuteV1(@ModelAttribute HelloData helloData) {
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("hellodata={}", helloData);
+        return "ok";
+    }
+```
+- @ModelAttribute
+  1. HelloData객체를 생성한다.
+  2. 요청 파라미터의 이름으로 HelloData 객체의 프로퍼티를 찾는다.
+  3. setter를 호출하여 값을 바인딩한다.
+- 프로퍼티
+  - 객체에 getUsername() 메서드가 존재하면, username이라는 프로퍼티를 갖고 있는 것이다.
+- 바인딩 오류
+  - 프로퍼티의 타입에 맞지 않는 값이 들어온 경우 에러가 발생한다.
+  ![img.png](img/img_2.png)
+
+- @ModelAttribute, @RequestParam 모두 생략이 가능하다
+- 그렇다면 어떻게 동작하는 것인가?
+  - 스프링은 해당 어노테이션들을 생략하는 경우 다음과 같은 규칙이 적용된다.
+  - String, int, Interger 같은 단순 타입 = @RequestParam이 적용된다.
+  - argument resolver로 지정한 타입 외 나머지 = @ModelAttribuete이 적용된다.
+> argument resolver는 뒤에서 학습할 예정
+
