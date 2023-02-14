@@ -217,3 +217,44 @@ logging.level.hello.springmvc=debug
 - @ReqeuestBody
   - HTTP 메시지 바디 정보를 편리하게 조회할 수 있다.
   - 만약 헤더 정보가 필요하다면, HttpEntity를 사용하거나 @RequestHeader를 사용하면 된다.
+
+#### HTTP 요청 메시지 - JSON
+```java
+    @ResponseBody
+    @PostMapping("request-body-json-v3")
+    public String requestBodyJsonV2(@RequestBody HelloData helloData) throws IOException {
+        log.info("messageBody={}", helloData);
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        return "ok";
+    }
+```
+
+- 위와 같이 ObjectMapper를 사용하지 않고 JSON값을 바로 객체로 받을 수 있다.
+- HttpEntity, @RequestBody를 사용하면 HTTP 메시지 컨버터가 메시지 바디의 내용을 우리가 원하는 문자나 객체 등으로 변환해준다.
+- HTTP 메시지 컨버터는 문자 뿐만 아니라 JSON도 객체로 변환해준다.
+  - 이는 V2에서 했던 작업을 우리 대신 처리해주고 있기 때문이다.
+  ```java
+  HelloData helloData = objectMapper.readValue(messageBody, HelloData.class);
+  ```
+- 단 @RequestBody를 생략할 수는 없다.
+  - String, int, Integer 같은 단순 타입 = @RequestParam
+  - 나머지 = @ModelAttribute
+  - 즉 HTTP의 바디 메시지에 데이터가 담겨있는데 꺼내질 못하게 되는 것이다.
+
+- @ResponseBody 
+  - 응답의 경우에 해당 어노테이션을 작성하면 HTTP 메시지 바디에 값을 직접 넣을 수 있다.
+  
+- @RequestBody 요청
+  - JSON 요청 -> HTTP 메시지 컨버터 -> 객체
+- @ResponseBody
+  - 객체 -> HTTP 메시지 컨버터 -> JSON 응답
+- 즉 객체를 반환해도 메시지 컨버터가 자동으로 JSON 타입으로 형변환을 해준다.
+```java
+    @ResponseBody
+    @PostMapping("request-body-json-v5")
+    public HelloData requestBodyJsonV2(@RequestBody HelloData helloData) throws IOException {
+        log.info("messageBody={}", helloData);
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        return helloData;
+    }
+```
