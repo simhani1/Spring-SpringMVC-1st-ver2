@@ -258,3 +258,37 @@ logging.level.hello.springmvc=debug
         return helloData;
     }
 ```
+
+#### HTTP 응답 - 정적 리소스, 뷰 템플릿
+- 정적 리소스
+  - HTML, CSS, js 등 정적 리소스
+- 뷰 템플릿 사용
+  - 동적인 HTML
+- HTTP 메시지 사용
+  - HTTP 메시지 바디에 JSON 형식의 데이터를 실어 보낸다.
+
+- 정적 리소스
+  - `/static, /public`, `/resources`, `/META-INF/resources`에 있는 정적 리소스를 제공한다.
+  - 정적 리소스는 해당 파일을 변경없이 그대로 서비스 하는 것이다.
+
+- 뷰 템플릿
+- 뷰 템플릿을 거쳐서 HTML이 생성되고 뷰가 응답을 만들어서 전달한다.
+  - `src/main/resources/templates`
+
+- @ResponseBody가 없으면 뷰 리졸버가 실행되어서 뷰를 찾고 렌더링 한다.
+  - 있다면 뷰 리졸버를 실행하지 않고, HTTP 메시지 바디에 직접 `response/hello`라는 문자가 입력된다.
+
+- void를 반환하는 경우
+  - @Cotroller를 사용하고, HttpServletrequest. HttpServletResponse 같은 HTTP 메시지 바디를 처리하는 파라미터가 없으면 요청 URL을 참고해서 논리 뷰 이름으로 사용한다.
+
+- Thymeleaf 스프링 부트 설정
+  - 스프링 부트가 자동으로 `ThymeleafViewResolver` 와 필요한 스프링 빈들을 등록한다. 
+  - 그리고 다음 설정도 사용한다. 이 설정은 기본 값 이기 때문에 변경이 필요할 때만 설정하면 된다.
+    ```groovy
+    spring.thymeleaf.prefix=classpath:/templates/
+    spring.thymeleaf.suffix=.html
+    ```
+[타임리프 참고 링크](https://docs.spring.io/spring-boot/docs/2.4.3/reference/html/appendix-application-properties.html#common-application-properties-templating)
+
+
+ 
