@@ -290,5 +290,6 @@ logging.level.hello.springmvc=debug
     ```
 [타임리프 참고 링크](https://docs.spring.io/spring-boot/docs/2.4.3/reference/html/appendix-application-properties.html#common-application-properties-templating)
 
+#### HTTP 응답 - HTTP API, 메시ㅣㅈ 바디에 직접 입력
 
  
