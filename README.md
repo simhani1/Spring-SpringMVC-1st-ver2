@@ -192,3 +192,28 @@ logging.level.hello.springmvc=debug
   - argument resolver로 지정한 타입 외 나머지 = @ModelAttribuete이 적용된다.
 > argument resolver는 뒤에서 학습할 예정
 
+#### HTTP 요청 메시지 - 단순 텍스트
+- 요청 파라미터와 다르게, HTTP 메시지 바디를 통해 데이터가 직접 넘어오는 경우, @ModelAttribute, @RequestParam을 사용할 수 없다.
+- HTTP 바디의 메시지를 inputStream을 사용하여 읽을 수 있다.
+
+- 스프링 MVC는 다음 파라미터르 지원한다.
+  - InputStream(Reader): HTTP 요청 메시지 바디의 내용을 직접 조회
+  - OutPutStream(Writer): HTTP 응답 메시지의 바디에 직접 결과 출력
+
+- HttpEntity: HTTP header, body 정보를 편하게 조회
+  - 메시지 바디 정보를 직접 조회
+  - 요청 파라미터를 조회하는 기능과 관계없음
+- HttpEntity는 응답에도 사용 가능
+  - 메시지 바디 정보 직접 반환
+  - 헤더 정보 포함 가능
+  - view 조회x
+- HttpEntity를 상속받은 다음 객체들도 같은 기능을 제공한다.
+  - ReuqestEntity : HttpMethod, url 정보가 추가, 요청에서 사용
+- ResponseEntity : HTTP 상태 코드 설정 가능, 응답에서 사용
+
+- 스프링 MVC 내부에서 HTTP 메시지 바디를 읽어서 문자나 객체로 변환해서 전달해준다.
+- 이때 HTTP 메시지 컨버터라는 기능을 사용한다. 
+
+- @ReqeuestBody
+  - HTTP 메시지 바디 정보를 편리하게 조회할 수 있다.
+  - 만약 헤더 정보가 필요하다면, HttpEntity를 사용하거나 @RequestHeader를 사용하면 된다.
