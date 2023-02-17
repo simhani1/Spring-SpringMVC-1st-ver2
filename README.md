@@ -290,6 +290,45 @@ logging.level.hello.springmvc=debug
     ```
 [타임리프 참고 링크](https://docs.spring.io/spring-boot/docs/2.4.3/reference/html/appendix-application-properties.html#common-application-properties-templating)
 
-#### HTTP 응답 - HTTP API, 메시ㅣㅈ 바디에 직접 입력
+#### HTTP 응답 - HTTP API, 메시지 바디에 직접 입력
+- @ResponseBody 사용 원리 
+  - HTTP의 BODY에 문자 내용을 직접 반환
+  - viewResolver 대신에 HttpMesssageConverter가 동작
+  - 기본 문자처리: StringHttpMessageConverter
+  - 기본 객체처리: MappingJackson2HttpMessageConverter
+  - byte처리 등등 기타 여러 HttpMessageConverter가 기본적으로 등록되어 있음
+- HTP Accept 헤더와 서버의 컨트롤러 반환 타입 정보들을 조합해서 HttpMessageConverter가 선택된다
+
+- MessageConverter
+  - canRead(), canWrite(): 메시지 컨버터가 해당 클래스, 미디어 타입을 지원하는지 체크
+  - read(), write(): 메시지 컨버터를 통해서 메시지를 읽고 쓰는 기능
+- 스프링 부트는 다양한 메시지 컨버터를 제공하는데, 대상 클래스 타입과 미디어 타입 둘을 체크해서 사용여부를 결정한다. 만약 만족하지 않으면 다음 메시지 컨버터로 우선순위가 넘어간다.
+
+- 예시
+- StringMessageConverter
+```
+content-type: application/json
+
+@RequestMapping
+void hello(@RequestBody String data) {}
+```
+
+- MappingJackson2HttpMessageConverter
+```
+content-type: application/json
+
+@RequestMapping
+void hello(@RequestBody Hellodata hellodata) {}
+```
+
+- ?(컨버터가 실패하는 경우)
+```
+content-type: text/html
+
+@RequestMapping
+void hello(@RequestBody HelloData hellodata) {}
+```
+
+
 
  
