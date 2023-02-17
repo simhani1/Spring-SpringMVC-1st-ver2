@@ -329,6 +329,36 @@ content-type: text/html
 void hello(@RequestBody HelloData hellodata) {}
 ```
 
-
-
- 
+- 요청 맵핑 핸들러 어댑터 구조
+  - 그렇다면 HTTP 메시지 컨버터는 스프링 MVC 어디 쯤에서 사용되는 것일까
+  - 컨트롤러를 호출하는 곳에서 사용이 될 것이다. 
+  - `@RequestMapping`을 처리하는 핸들러 어댑터인 `RequestMappingHandlerAdapter`(요청 맵핑 핸들러)에 있다.
+- `RequestMappingHandlerAdapter` 동작 방식
+  ![img.png](img/img_3.png)
+- `ArgumentResolver`
+  - 지금까지 어노테이션 기반의 컨트롤러는 매우 다양한 파라미터를 사용할 수 있었다.
+  - 이는 ArgumentResolver를 호출해서 컨트롤러(핸들러)가 필요로 하는 다양한 파라미터 값(객체)을 생성한다.
+  - 이렇게 파라미터의 값이 모두 준비되면 컨트롤러를 호출하면서 값을 넘겨준다.
+  - 스프링은 30개가 넘는 resolver들을 제공해준다.
+- 동작 방식
+  - ArgumentResolver의 supportsParameter()를 호출해서 해당 파라미터를 지원하는지 체크하고, 지원하면 resolverArgument()를 호출해서 실제 객체를 생성한다.
+  - 이렇게 생성된 객체가 컨트롤러 호출 시 넘어가는 것이다.
+- ReturnValueHandler
+  - 컨트롤러의 응답 값을 변환하고 처리한다.
+- HTTP 메시지 컨버터
+  ![img.png](img/img_4.png)
+  - HTTP 메시지 컨버터를 사용하는 @RequestBody도 컨트롤러가 필요로 하는 파라미터의 값에 사용된다.
+  - @ResponseBody의 경우도 컨트롤러의 반환 값을 이용한다.
+- 요청의 경우
+  - @RequestBody, HttpEntity를 처리하는 ArgumentResolver가 있다.
+  - 이 ArgumentResolver들이 HTTP 메시지 컨버터를 사용해서 필요한 객체를 생성하는 것이다.
+- 응답의 경우
+  - @ResponseBody, HttpEntity를 처리하는 ReturnValueResolver가 있다. 
+  - 여기서 HTTP 메시지 컨버터를 호출해서 응답 결과를 만든다.
+- 확장
+  - 스프링은 다음을 모두 인터페이스로 제공한다. 따라서 필요하면 언제든지 기능을 확장할 수 있다.
+    - HandlerMethodArgumentResolver
+    - HandlerMethodReturnValueHandler
+    - HttpMessageConverter
+  - 스프링이 필요한 대부분의 기능을 제공하기 때문에 기능 확장은 WebMvcConfigure를 상속 받아서 스프링 빈으로 등록하면 된다.
+  - 
