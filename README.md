@@ -361,4 +361,3 @@ void hello(@RequestBody HelloData hellodata) {}
     - HandlerMethodReturnValueHandler
     - HttpMessageConverter
   - 스프링이 필요한 대부분의 기능을 제공하기 때문에 기능 확장은 WebMvcConfigure를 상속 받아서 스프링 빈으로 등록하면 된다.
-  - 
